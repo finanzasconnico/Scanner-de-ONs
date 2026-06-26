@@ -111,6 +111,15 @@ tbody td{padding:8px 12px;color:var(--text);vertical-align:middle;}
 .threshold-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
 .threshold-row input[type=range]{width:100px;accent-color:var(--ambar);}
 .threshold-val{font-size:12px;font-weight:500;color:var(--text);min-width:40px;font-family:var(--font-mono);}
+.range-block{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--radius);padding:9px 11px;display:flex;flex-direction:column;gap:7px;}
+.range-row{display:flex;align-items:center;gap:7px;}
+.range-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.range-lbl{font-size:11px;color:var(--ink-muted);flex-shrink:0;}
+.range-num-input{flex:1;padding:5px 7px;font-size:13px;font-weight:500;font-family:var(--font-mono);border:1px solid var(--border);border-radius:var(--radius);background:rgba(255,255,255,.06);color:var(--text);text-align:center;min-width:0;outline:none;transition:border-color .15s;}
+.range-num-input:hover{border-color:rgba(255,255,255,.3);}
+.range-num-input:focus{border-color:var(--ambar);background:rgba(255,255,255,.09);}
+.range-unit{font-size:11px;color:var(--ink-muted);flex-shrink:0;min-width:24px;}
+.range-sep{height:1px;background:var(--border);}
 .empty-state{text-align:center;padding:60px 20px;color:var(--ink-muted);}
 .empty-icon{font-size:3rem;margin-bottom:14px;opacity:.5;}
 .empty-title{font-family:var(--font-display);font-size:18px;color:rgba(234,241,238,0.5);margin-bottom:6px;}
@@ -365,37 +374,40 @@ tbody tr.highlight-high:hover{background:rgba(28,140,95,0.09);}
     </div>
     <div class="divider"></div>
     <div>
-      <div class="section-title">3 · Rango de TIR</div>
-      <div style="margin-bottom:8px;">
-        <div style="font-size:10px;color:var(--ink-muted);margin-bottom:4px;">TIR mínima (rojo por debajo):</div>
-        <div class="threshold-row">
-          <input type="range" id="slider-tir" min="0" max="15" step="0.5" value="5" oninput="actualizarUmbral()">
-          <span class="threshold-val" id="val-tir">5.0%</span>
+      <div class="section-title">3 · Umbral TIR</div>
+      <div class="range-block">
+        <div class="range-row">
+          <div class="range-dot" style="background:var(--danger)"></div>
+          <span class="range-lbl">Bajo</span>
+          <input type="number" id="inp-tir-min" class="range-num-input" value="5.0" min="0" max="30" step="0.1" oninput="actualizarUmbral()">
+          <span class="range-unit">%</span>
         </div>
-        <div style="font-size:10px;color:var(--ink-muted);margin-bottom:4px;margin-top:8px;">TIR máxima (verde por encima):</div>
-        <div class="threshold-row">
-          <input type="range" id="slider-tir-alta" min="0" max="20" step="0.5" value="8" oninput="actualizarUmbralAlta()">
-          <span class="threshold-val" id="val-tir-alta">8.0%</span>
+        <div class="range-sep"></div>
+        <div class="range-row">
+          <div class="range-dot" style="background:var(--jade)"></div>
+          <span class="range-lbl">Alto</span>
+          <input type="number" id="inp-tir-max" class="range-num-input" value="8.0" min="0" max="30" step="0.1" oninput="actualizarUmbralAlta()">
+          <span class="range-unit">%</span>
         </div>
       </div>
-      <div style="font-size:10px;color:var(--ink-muted);margin-bottom:6px;">Filtrar tabla (mostrar solo):</div>
-      <select id="sel-filtro-tir" onchange="aplicarFiltros()" style="width:100%;padding:7px 10px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--font-sans);font-size:12px;outline:none;">
-        <option value="todos">— Todas las ONs (sin filtro) —</option>
-        <option value="alta">Solo TIR ≥ máxima</option>
-        <option value="media">Solo TIR entre mínima y máxima</option>
-        <option value="baja">Solo TIR &lt; mínima</option>
-      </select>
-      <div id="filtro-tir-desc" style="font-size:9px;color:var(--ambar);margin-top:5px;line-height:1.5;display:none;"></div>
     </div>
     <div class="divider"></div>
     <div>
-      <div class="section-title">5 · Filtro por Duration</div>
-      <div style="margin-bottom:6px;font-size:10px;color:var(--ink-muted);">Mostrar solo ONs con duration ≤ (0 = todas):</div>
-      <div class="threshold-row">
-        <input type="range" id="slider-dur" min="0" max="10" step="0.5" value="0" oninput="actualizarFiltrosDur()">
-        <span class="threshold-val" id="val-dur">Todas</span>
+      <div class="section-title">4 · Duration (años)</div>
+      <div class="range-block">
+        <div class="range-row">
+          <span class="range-lbl" style="width:28px;">Mín</span>
+          <input type="number" id="inp-dur-min" class="range-num-input" value="0" min="0" max="30" step="0.5" oninput="actualizarFiltrosDur()">
+          <span class="range-unit">años</span>
+        </div>
+        <div class="range-sep"></div>
+        <div class="range-row">
+          <span class="range-lbl" style="width:28px;">Máx</span>
+          <input type="number" id="inp-dur-max" class="range-num-input" value="0" min="0" max="30" step="0.5" oninput="actualizarFiltrosDur()">
+          <span class="range-unit">años</span>
+        </div>
+        <div style="font-size:9px;color:var(--ink-muted);padding-top:4px;">0 en Máx = sin límite superior</div>
       </div>
-      <div style="font-size:9px;color:var(--ink-muted);line-height:1.5;">Filtra por duration (años). Útil para clientes que prefieren corto plazo.</div>
     </div>
     <div class="divider"></div>
     <div id="log-panel" style="display:none">
@@ -592,7 +604,8 @@ let datosFusionados = [];
 let datosFiltrados = [];
 let umbralTIR = 5.0;
 let umbralTIRAlta = 8.0;
-let umbralDurMax = 0; // 0 = sin límite
+let umbralDurMax = 0;
+let umbralDurMin = 0;
 let sortResumen = 'bajas';
 let sortState = { tabla: null, col: null, dir: 'asc' };
 let tirOriginales = {};
@@ -922,15 +935,11 @@ function aplicarFiltros() {
   const chkBop=document.getElementById('chk-bop')?.checked??true;
   const tipoMap={'corporativo':chkCorp,'soberano':chkSob,'provincial':chkProv,'bopreal':chkBop,'dollarlinked':chkSob};
   const filtrarTipo=!(chkCorp&&chkSob&&chkProv&&chkBop);
-  const modoTIR=document.getElementById('sel-filtro-tir')?.value||'todos';
+  const modoTIR='todos';
   const minTIR=umbralTIR/100;
   const maxTIR=umbralTIRAlta/100;
-  // Actualizar descripción del filtro activo
-  const descEl=document.getElementById('filtro-tir-desc');
-  if(descEl){
-    if(modoTIR==='todos'){descEl.style.display='none';}
-    else{
-      const textos={'alta':`Mostrando solo TIR ≥ ${umbralTIRAlta}%`,'media':`Mostrando solo TIR entre ${umbralTIR}% y ${umbralTIRAlta}%`,'baja':`Mostrando solo TIR < ${umbralTIR}%`};
+  if(false){
+    const textos={'alta':`Mostrando solo TIR ≥ ${umbralTIRAlta}%`,'media':`Mostrando solo TIR entre ${umbralTIR}% y ${umbralTIRAlta}%`,'baja':`Mostrando solo TIR < ${umbralTIR}%`};
       descEl.textContent=textos[modoTIR]||'';
       descEl.style.display='block';
     }
@@ -940,6 +949,7 @@ function aplicarFiltros() {
     if(cliente&&!d.cliente.toLowerCase().includes(cliente)) return false;
     if(tickers.length&&!tickers.some(t=>d.ticker.toLowerCase().includes(t))) return false;
     if(calif&&!d.calificacion.toLowerCase().includes(calif)) return false;
+    if(umbralDurMin>0&&d.duration!==null&&d.duration<umbralDurMin) return false;
     if(umbralDurMax>0&&d.duration!==null&&d.duration>umbralDurMax) return false;
     if(filtrarTipo&&!(tipoMap[d.tipo]??true)) return false;
     // Filtro por rango TIR
@@ -1809,16 +1819,16 @@ function formatVto(v) {
 }
 
 function actualizarUmbral() {
-  umbralTIR=parseFloat(document.getElementById('slider-tir').value);
-  document.getElementById('val-tir').textContent=umbralTIR.toFixed(1)+'%';
-  actualizarDescFiltroTIR();
+  const v=parseFloat(document.getElementById('inp-tir-min').value);
+  if(isNaN(v)||v<0) return;
+  umbralTIR=v;
   if(datosFusionados.length>0) aplicarFiltros();
 }
 
 function actualizarUmbralAlta() {
-  umbralTIRAlta=parseFloat(document.getElementById('slider-tir-alta').value);
-  document.getElementById('val-tir-alta').textContent=umbralTIRAlta.toFixed(1)+'%';
-  actualizarDescFiltroTIR();
+  const v=parseFloat(document.getElementById('inp-tir-max').value);
+  if(isNaN(v)||v<0) return;
+  umbralTIRAlta=v;
   if(datosFusionados.length>0) aplicarFiltros();
 }
 
@@ -1976,22 +1986,17 @@ function mailATodosClientes() {
 }
 
 function actualizarFiltrosDur() {
-  umbralDurMax=parseFloat(document.getElementById('slider-dur').value);
-  document.getElementById('val-dur').textContent=umbralDurMax>0?umbralDurMax.toFixed(1)+'y':'Todas';
+  const mn=parseFloat(document.getElementById('inp-dur-min').value);
+  const mx=parseFloat(document.getElementById('inp-dur-max').value);
+  umbralDurMin=isNaN(mn)||mn<0?0:mn;
+  umbralDurMax=isNaN(mx)||mx<0?0:mx;
   if(datosFusionados.length>0) aplicarFiltros();
 }
 
 // ── SHARED FILES AUTO-LOAD ──
 (function() {
   const DB_NAME = 'fcn_shared_v1', DB_STORE = 'files';
-  function getUsername() {
-    try {
-      const up = new URLSearchParams(location.search).get('u');
-      if (up) return up;
-      return JSON.parse(localStorage.getItem('fcn_suite_auth')||'{}').username || '';
-    } catch { return ''; }
-  }
-  function uk(k) { const u = getUsername(); return u ? u + '_' + k : k; }
+  function uk(k) { return k; }
   function openDB() {
     return new Promise((res, rej) => {
       const r = indexedDB.open(DB_NAME, 1);
